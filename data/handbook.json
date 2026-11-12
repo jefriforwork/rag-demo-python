@@ -1,0 +1,18 @@
+[
+  {
+    "title": "病假 Sick leave",
+    "text": "員工請病假時，要在當天上班前到人事系統登記。全薪病假一年有 30 天。連續請假超過 2 天，要附上醫師開立的診斷證明。若是早上才突然不舒服，可以在當日補登記。"
+  },
+  {
+    "title": "報銷 Expenses",
+    "text": "出差搭計程車，回來後 7 天內要把收據上傳到報銷系統。出差的餐費，每天合計不超過 500 元。沒有收據就不能申請報銷。"
+  },
+  {
+    "title": "訪客網路 Guest Wi-Fi",
+    "text": "來訪客人要上網時，連線名稱是 Guest。登入密碼是 welcome-guest。密碼每個月 1 日會更換，最新的一組可以問一樓前台。"
+  },
+  {
+    "title": "在家工作 Remote work",
+    "text": "Employees may work from home on Fridays. Tell your manager by Thursday noon. The laptop must stay connected to the company VPN."
+  }
+]

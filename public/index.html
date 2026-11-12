@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RAG demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem auto;
+        max-width: 40rem;
+        line-height: 1.5;
+      }
+      textarea {
+        width: 100%;
+        min-height: 4rem;
+      }
+      button {
+        margin: 0.5rem 0.5rem 0.5rem 0;
+      }
+      li {
+        margin-bottom: 0.75rem;
+      }
+      pre {
+        white-space: pre-wrap;
+        background: #f4f4f4;
+        padding: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>員工手冊問答</h1>
+    <p>可以用中文或英文問。程式先把問題和手冊都交給 text2vec 的多語言模型，變成向量後找出最相關的一段，再從那段裡挑一句。</p>
+    <textarea id="question">What document do I need if sick leave is longer than 2 days?</textarea>
+    <div>
+      <button type="button" id="ask">查詢</button>
+      <button type="button" data-question="病假連續超過 2 天要附什麼？">病假證明</button>
+      <button type="button" data-question="What is the guest Wi-Fi password?">Guest Wi-Fi</button>
+      <button type="button" data-question="星期五可以在家工作嗎？">在家工作</button>
+      <button type="button" data-question="How much can I spend on meals each day?">餐費上限</button>
+    </div>
+    <h2>回答</h2>
+    <p id="answer"></p>
+    <h2>找到的手冊段落</h2>
+    <ol id="matches"></ol>
+    <h2>公司會把這段交給模型</h2>
+    <pre id="prompt"></pre>
+    <script>
+      const question = document.querySelector('#question')
+      const answer = document.querySelector('#answer')
+      const matches = document.querySelector('#matches')
+      const prompt = document.querySelector('#prompt')
+
+      async function run() {
+        const response = await fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: question.value }),
+        })
+        const result = await response.json()
+        answer.textContent = result.answer
+        prompt.textContent = result.prompt
+        matches.replaceChildren()
+        for (const match of result.matches) {
+          const item = document.createElement('li')
+          item.textContent = `${match.title}（相似度 ${match.score.toFixed(2)}）：${match.text}`
+          matches.appendChild(item)
+        }
+      }
+
+      document.querySelector('#ask').addEventListener('click', run)
+      for (const button of document.querySelectorAll('[data-question]')) {
+        button.addEventListener('click', () => {
+          question.value = button.dataset.question
+          run()
+        })
+      }
+    </script>
+  </body>
+</html>
